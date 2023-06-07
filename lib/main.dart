@@ -4,6 +4,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 
 late final FragmentProgram dottedCircleProgram;
+
 void main() async {
   dottedCircleProgram = await FragmentProgram.fromAsset(
     'shaders/dotted_circle.frag',
@@ -17,7 +18,7 @@ class MainApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return const MaterialApp(
       home: Home(),
     );
   }
@@ -80,12 +81,16 @@ class DemoPainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    final dashAngle = 2 * pi / (radius / dashSize);
-
     final shader = program.fragmentShader();
+
+    // uniform float uRadius;
     shader.setFloat(0, radius);
+    
+    // uniform float uDashAngle;
+    final dashAngle = 2 * pi / (radius / dashSize);
     shader.setFloat(1, dashAngle);
 
+    // uniform vec3 uColor;
     shader.setFloat(2, color.red / 255 * color.opacity);
     shader.setFloat(3, color.green / 255 * color.opacity);
     shader.setFloat(4, color.blue / 255 * color.opacity);
